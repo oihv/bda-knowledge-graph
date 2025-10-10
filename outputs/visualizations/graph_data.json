@@ -1,0 +1,1679 @@
+{
+  "nodes": [
+    {
+      "id": "United States Securities and Exchange Commission",
+      "label": "United States Securities and Exchange Commission",
+      "properties": {
+        "name": "United States Securities and Exchange Commission",
+        "location": "Washington, D.C."
+      }
+    },
+    {
+      "id": "Washington, D.C.",
+      "label": "Washington, D.C.",
+      "properties": {
+        "name": "Washington, D.C."
+      }
+    },
+    {
+      "id": "Apple Inc.",
+      "label": "Apple Inc.",
+      "properties": {
+        "address": "One Apple Park Way, Cupertino, California 95014",
+        "incorporation_state": "California",
+        "phone": "(408) 996-1010",
+        "name": "Apple Inc.",
+        "sec_file_number": "001-36743",
+        "tax_id": "94-2404110"
+      }
+    },
+    {
+      "id": "Human Capital",
+      "label": "Human Capital",
+      "properties": {
+        "name": "Human Capital"
+      }
+    },
+    {
+      "id": "Growth and Development",
+      "label": "Growth and Development",
+      "properties": {
+        "name": "Growth and Development"
+      }
+    },
+    {
+      "id": "Compensation and Benefits",
+      "label": "Compensation and Benefits",
+      "properties": {
+        "name": "Compensation and Benefits"
+      }
+    },
+    {
+      "id": "Common Stock, $0.00001 par value per share",
+      "label": "Common Stock, $0.00001 par value per share",
+      "properties": {
+        "trading_symbol": "AAPL",
+        "name": "Common Stock, $0.00001 par value per share"
+      }
+    },
+    {
+      "id": "0.000% Notes due 2025",
+      "label": "0.000% Notes due 2025",
+      "properties": {
+        "name": "0.000% Notes due 2025"
+      }
+    },
+    {
+      "id": "0.875% Notes due 2025",
+      "label": "0.875% Notes due 2025",
+      "properties": {
+        "name": "0.875% Notes due 2025"
+      }
+    },
+    {
+      "id": "1.625% Notes due 2026",
+      "label": "1.625% Notes due 2026",
+      "properties": {
+        "name": "1.625% Notes due 2026"
+      }
+    },
+    {
+      "id": "2.000% Notes due 2027",
+      "label": "2.000% Notes due 2027",
+      "properties": {
+        "name": "2.000% Notes due 2027"
+      }
+    },
+    {
+      "id": "1.375% Notes due 2029",
+      "label": "1.375% Notes due 2029",
+      "properties": {
+        "name": "1.375% Notes due 2029"
+      }
+    },
+    {
+      "id": "3.050% Notes due 2029",
+      "label": "3.050% Notes due 2029",
+      "properties": {
+        "name": "3.050% Notes due 2029"
+      }
+    },
+    {
+      "id": "0.500% Notes due 2031",
+      "label": "0.500% Notes due 2031",
+      "properties": {
+        "name": "0.500% Notes due 2031"
+      }
+    },
+    {
+      "id": "3.600% Notes due 2042",
+      "label": "3.600% Notes due 2042",
+      "properties": {
+        "name": "3.600% Notes due 2042"
+      }
+    },
+    {
+      "id": "patents",
+      "label": "patents",
+      "properties": {
+        "name": "patents"
+      }
+    },
+    {
+      "id": "designs",
+      "label": "designs",
+      "properties": {
+        "name": "designs"
+      }
+    },
+    {
+      "id": "copyrights",
+      "label": "copyrights",
+      "properties": {
+        "name": "copyrights"
+      }
+    },
+    {
+      "id": "trademarks",
+      "label": "trademarks",
+      "properties": {
+        "name": "trademarks"
+      }
+    },
+    {
+      "id": "trade secrets",
+      "label": "trade secrets",
+      "properties": {
+        "name": "trade secrets"
+      }
+    },
+    {
+      "id": "2024 Form 10-K",
+      "label": "2024 Form 10-K",
+      "properties": {
+        "name": "2024 Form 10-K"
+      }
+    },
+    {
+      "id": "The Nasdaq Stock Market LLC",
+      "label": "The Nasdaq Stock Market LLC",
+      "properties": {
+        "name": "The Nasdaq Stock Market LLC"
+      }
+    },
+    {
+      "id": "Securities Exchange Act of 1934",
+      "label": "Securities Exchange Act of 1934",
+      "properties": {
+        "name": "Securities Exchange Act of 1934"
+      }
+    },
+    {
+      "id": "third parties",
+      "label": "third parties",
+      "properties": {
+        "name": "third parties"
+      }
+    },
+    {
+      "id": "Cupertino, California",
+      "label": "Cupertino, California",
+      "properties": {
+        "name": "Cupertino, California"
+      }
+    },
+    {
+      "id": "www.apple.com",
+      "label": "www.apple.com",
+      "properties": {
+        "name": "www.apple.com"
+      }
+    },
+    {
+      "id": "investor.apple.com",
+      "label": "investor.apple.com",
+      "properties": {
+        "name": "investor.apple.com"
+      }
+    },
+    {
+      "id": "U.S.",
+      "label": "U.S.",
+      "properties": {
+        "name": "U.S."
+      }
+    },
+    {
+      "id": "foreign countries",
+      "label": "foreign countries",
+      "properties": {
+        "name": "foreign countries"
+      }
+    },
+    {
+      "id": "first quarter",
+      "label": "first quarter",
+      "properties": {
+        "name": "first quarter"
+      }
+    },
+    {
+      "id": "Form 8-K",
+      "label": "Form 8-K",
+      "properties": {
+        "name": "Form 8-K"
+      }
+    },
+    {
+      "id": "Form 10-Q",
+      "label": "Form 10-Q",
+      "properties": {
+        "name": "Form 10-Q"
+      }
+    },
+    {
+      "id": "Form 10-K",
+      "label": "Form 10-K",
+      "properties": {
+        "name": "Form 10-K"
+      }
+    },
+    {
+      "id": "164,000 full-time equivalent employees",
+      "label": "164,000 full-time equivalent employees",
+      "properties": {
+        "date": "September 28, 2024",
+        "name": "164,000 full-time equivalent employees"
+      }
+    },
+    {
+      "id": "seasonal holiday demand",
+      "label": "seasonal holiday demand",
+      "properties": {
+        "name": "seasonal holiday demand"
+      }
+    },
+    {
+      "id": "new product and service introductions",
+      "label": "new product and service introductions",
+      "properties": {
+        "name": "new product and service introductions"
+      }
+    },
+    {
+      "id": "iPhone",
+      "label": "iPhone",
+      "properties": {
+        "name": "iPhone"
+      }
+    },
+    {
+      "id": "iOS",
+      "label": "iOS",
+      "properties": {
+        "name": "iOS"
+      }
+    },
+    {
+      "id": "iPhone 16 Pro",
+      "label": "iPhone 16 Pro",
+      "properties": {
+        "name": "iPhone 16 Pro"
+      }
+    },
+    {
+      "id": "iPhone 16",
+      "label": "iPhone 16",
+      "properties": {
+        "name": "iPhone 16"
+      }
+    },
+    {
+      "id": "iPhone 15",
+      "label": "iPhone 15",
+      "properties": {
+        "name": "iPhone 15"
+      }
+    },
+    {
+      "id": "iPhone 14",
+      "label": "iPhone 14",
+      "properties": {
+        "name": "iPhone 14"
+      }
+    },
+    {
+      "id": "iPhone SE",
+      "label": "iPhone SE",
+      "properties": {
+        "name": "iPhone SE"
+      }
+    },
+    {
+      "id": "research",
+      "label": "research",
+      "properties": {
+        "name": "research"
+      }
+    },
+    {
+      "id": "development",
+      "label": "development",
+      "properties": {
+        "name": "development"
+      }
+    },
+    {
+      "id": "design",
+      "label": "design",
+      "properties": {
+        "name": "design"
+      }
+    },
+    {
+      "id": "marketing",
+      "label": "marketing",
+      "properties": {
+        "name": "marketing"
+      }
+    },
+    {
+      "id": "products",
+      "label": "products",
+      "properties": {
+        "name": "products"
+      }
+    },
+    {
+      "id": "services",
+      "label": "services",
+      "properties": {
+        "name": "services"
+      }
+    },
+    {
+      "id": "older product",
+      "label": "older product",
+      "properties": {
+        "name": "older product"
+      }
+    },
+    {
+      "id": "newer product",
+      "label": "newer product",
+      "properties": {
+        "name": "newer product"
+      }
+    },
+    {
+      "id": "indirect distribution channels",
+      "label": "indirect distribution channels",
+      "properties": {
+        "name": "indirect distribution channels"
+      }
+    },
+    {
+      "id": "innovative skills",
+      "label": "innovative skills",
+      "properties": {
+        "name": "innovative skills"
+      }
+    },
+    {
+      "id": "technical competence",
+      "label": "technical competence",
+      "properties": {
+        "name": "technical competence"
+      }
+    },
+    {
+      "id": "marketing abilities",
+      "label": "marketing abilities",
+      "properties": {
+        "name": "marketing abilities"
+      }
+    },
+    {
+      "id": "personnel",
+      "label": "personnel",
+      "properties": {
+        "name": "personnel"
+      }
+    },
+    {
+      "id": "channel inventory",
+      "label": "channel inventory",
+      "properties": {
+        "name": "channel inventory"
+      }
+    },
+    {
+      "id": "licenses",
+      "label": "licenses",
+      "properties": {
+        "name": "licenses"
+      }
+    },
+    {
+      "id": "U.S. Securities and Exchange Commission",
+      "label": "U.S. Securities and Exchange Commission",
+      "properties": {
+        "name": "U.S. Securities and Exchange Commission"
+      }
+    },
+    {
+      "id": "consumers and distributors",
+      "label": "consumers and distributors",
+      "properties": {
+        "name": "consumers and distributors"
+      }
+    },
+    {
+      "id": "None",
+      "label": "None",
+      "properties": {
+        "name": "None"
+      }
+    },
+    {
+      "id": "Rule 405 of Regulation S-T",
+      "label": "Rule 405 of Regulation S-T",
+      "properties": {
+        "name": "Rule 405 of Regulation S-T"
+      }
+    },
+    {
+      "id": "Rule 12b-2 of the Exchange Act",
+      "label": "Rule 12b-2 of the Exchange Act",
+      "properties": {
+        "name": "Rule 12b-2 of the Exchange Act"
+      }
+    },
+    {
+      "id": "Section 13(a) of the Exchange Act",
+      "label": "Section 13(a) of the Exchange Act",
+      "properties": {
+        "name": "Section 13(a) of the Exchange Act"
+      }
+    },
+    {
+      "id": "Section 404(b) of the Sarbanes-Oxley Act",
+      "label": "Section 404(b) of the Sarbanes-Oxley Act",
+      "properties": {
+        "name": "Section 404(b) of the Sarbanes-Oxley Act"
+      }
+    },
+    {
+      "id": "Section 12(b) of the Act",
+      "label": "Section 12(b) of the Act",
+      "properties": {
+        "name": "Section 12(b) of the Act"
+      }
+    },
+    {
+      "id": "Registrant",
+      "label": "Registrant",
+      "properties": {
+        "name": "Registrant"
+      }
+    },
+    {
+      "id": "90 days",
+      "label": "90 days",
+      "properties": {
+        "name": "90 days"
+      }
+    },
+    {
+      "id": "12 months",
+      "label": "12 months",
+      "properties": {
+        "name": "12 months"
+      }
+    },
+    {
+      "id": "Emerging growth company",
+      "label": "Emerging growth company",
+      "properties": {
+        "name": "Emerging growth company"
+      }
+    },
+    {
+      "id": "Smaller reporting company",
+      "label": "Smaller reporting company",
+      "properties": {
+        "name": "Smaller reporting company"
+      }
+    },
+    {
+      "id": "Non-accelerated filer",
+      "label": "Non-accelerated filer",
+      "properties": {
+        "name": "Non-accelerated filer"
+      }
+    },
+    {
+      "id": "Accelerated filer",
+      "label": "Accelerated filer",
+      "properties": {
+        "name": "Accelerated filer"
+      }
+    },
+    {
+      "id": "Large accelerated filer",
+      "label": "Large accelerated filer",
+      "properties": {
+        "name": "Large accelerated filer"
+      }
+    },
+    {
+      "id": "Interactive Data File",
+      "label": "Interactive Data File",
+      "properties": {
+        "name": "Interactive Data File"
+      }
+    },
+    {
+      "id": "Part II, Item 7",
+      "label": "Part II, Item 7",
+      "properties": {
+        "name": "Part II, Item 7"
+      }
+    },
+    {
+      "id": "Part I, Item 1",
+      "label": "Part I, Item 1",
+      "properties": {
+        "name": "Part I, Item 1"
+      }
+    },
+    {
+      "id": "Forward-looking statements",
+      "label": "Forward-looking statements",
+      "properties": {
+        "name": "Forward-looking statements"
+      }
+    },
+    {
+      "id": "Private Securities Litigation Reform Act of 1995",
+      "label": "Private Securities Litigation Reform Act of 1995",
+      "properties": {
+        "name": "Private Securities Litigation Reform Act of 1995"
+      }
+    },
+    {
+      "id": "Business",
+      "label": "Business",
+      "properties": {
+        "name": "Business"
+      }
+    },
+    {
+      "id": "Managements Discussion and Analysis of Financial Condition and Results of Operations",
+      "label": "Managements Discussion and Analysis of Financial Condition and Results of Operations",
+      "properties": {
+        "name": "Managements Discussion and Analysis of Financial Condition and Results of Operations"
+      }
+    },
+    {
+      "id": "Apple",
+      "label": "Apple",
+      "properties": {
+        "name": "Apple"
+      }
+    },
+    {
+      "id": "government",
+      "label": "government",
+      "properties": {
+        "name": "government"
+      }
+    },
+    {
+      "id": "enterprise",
+      "label": "enterprise",
+      "properties": {
+        "name": "enterprise"
+      }
+    },
+    {
+      "id": "education",
+      "label": "education",
+      "properties": {
+        "name": "education"
+      }
+    },
+    {
+      "id": "small and mid-sized business",
+      "label": "small and mid-sized business",
+      "properties": {
+        "name": "small and mid-sized business"
+      }
+    },
+    {
+      "id": "consumer",
+      "label": "consumer",
+      "properties": {
+        "name": "consumer"
+      }
+    },
+    {
+      "id": "Rest of Asia Pacific",
+      "label": "Rest of Asia Pacific",
+      "properties": {
+        "name": "Rest of Asia Pacific"
+      }
+    },
+    {
+      "id": "Japan",
+      "label": "Japan",
+      "properties": {
+        "name": "Japan"
+      }
+    },
+    {
+      "id": "Greater China",
+      "label": "Greater China",
+      "properties": {
+        "name": "Greater China"
+      }
+    },
+    {
+      "id": "Europe",
+      "label": "Europe",
+      "properties": {
+        "name": "Europe"
+      }
+    },
+    {
+      "id": "Americas",
+      "label": "Americas",
+      "properties": {
+        "name": "Americas"
+      }
+    },
+    {
+      "id": "Apple Pay",
+      "label": "Apple Pay",
+      "properties": {
+        "name": "Apple Pay"
+      }
+    },
+    {
+      "id": "Apple Card",
+      "label": "Apple Card",
+      "properties": {
+        "name": "Apple Card"
+      }
+    },
+    {
+      "id": "Apple TV",
+      "label": "Apple TV",
+      "properties": {
+        "name": "Apple TV"
+      }
+    },
+    {
+      "id": "Apple News",
+      "label": "Apple News",
+      "properties": {
+        "name": "Apple News"
+      }
+    },
+    {
+      "id": "Apple Music",
+      "label": "Apple Music",
+      "properties": {
+        "name": "Apple Music"
+      }
+    },
+    {
+      "id": "Apple Fitness",
+      "label": "Apple Fitness",
+      "properties": {
+        "name": "Apple Fitness"
+      }
+    },
+    {
+      "id": "Apple Arcade",
+      "label": "Apple Arcade",
+      "properties": {
+        "name": "Apple Arcade"
+      }
+    },
+    {
+      "id": "App Store",
+      "label": "App Store",
+      "properties": {
+        "name": "App Store"
+      }
+    },
+    {
+      "id": "Cloud Services",
+      "label": "Cloud Services",
+      "properties": {
+        "name": "Cloud Services"
+      }
+    },
+    {
+      "id": "South America",
+      "label": "South America",
+      "properties": {
+        "name": "South America"
+      }
+    },
+    {
+      "id": "North America",
+      "label": "North America",
+      "properties": {
+        "name": "North America"
+      }
+    },
+    {
+      "id": "Africa",
+      "label": "Africa",
+      "properties": {
+        "name": "Africa"
+      }
+    },
+    {
+      "id": "Middle East",
+      "label": "Middle East",
+      "properties": {
+        "name": "Middle East"
+      }
+    },
+    {
+      "id": "India",
+      "label": "India",
+      "properties": {
+        "name": "India"
+      }
+    },
+    {
+      "id": "Taiwan",
+      "label": "Taiwan",
+      "properties": {
+        "name": "Taiwan"
+      }
+    },
+    {
+      "id": "Hong Kong",
+      "label": "Hong Kong",
+      "properties": {
+        "name": "Hong Kong"
+      }
+    },
+    {
+      "id": "China mainland",
+      "label": "China mainland",
+      "properties": {
+        "name": "China mainland"
+      }
+    },
+    {
+      "id": "Australia",
+      "label": "Australia",
+      "properties": {
+        "name": "Australia"
+      }
+    },
+    {
+      "id": "The Company",
+      "label": "The Company",
+      "properties": {
+        "name": "The Company"
+      }
+    },
+    {
+      "id": "low cost structures",
+      "label": "low cost structures",
+      "properties": {
+        "name": "low cost structures"
+      }
+    },
+    {
+      "id": "aggressive pricing",
+      "label": "aggressive pricing",
+      "properties": {
+        "name": "aggressive pricing"
+      }
+    },
+    {
+      "id": "R&D",
+      "label": "R&D",
+      "properties": {
+        "name": "R&D"
+      }
+    },
+    {
+      "id": "intellectual property",
+      "label": "intellectual property",
+      "properties": {
+        "name": "intellectual property"
+      }
+    },
+    {
+      "id": "tablet",
+      "label": "tablet",
+      "properties": {
+        "name": "tablet"
+      }
+    },
+    {
+      "id": "personal computer",
+      "label": "personal computer",
+      "properties": {
+        "name": "personal computer"
+      }
+    },
+    {
+      "id": "global smartphone",
+      "label": "global smartphone",
+      "properties": {
+        "name": "global smartphone"
+      }
+    },
+    {
+      "id": "tensions between governments, including the U.S. and China",
+      "label": "tensions between governments, including the U.S. and China",
+      "properties": {
+        "name": "tensions between governments, including the U.S. and China"
+      }
+    },
+    {
+      "id": "restrictions on imports or exports of goods, technology or data",
+      "label": "restrictions on imports or exports of goods, technology or data",
+      "properties": {
+        "name": "restrictions on imports or exports of goods, technology or data"
+      }
+    },
+    {
+      "id": "tariffs",
+      "label": "tariffs",
+      "properties": {
+        "name": "tariffs"
+      }
+    },
+    {
+      "id": "restrictive measures",
+      "label": "restrictive measures",
+      "properties": {
+        "name": "restrictive measures"
+      }
+    },
+    {
+      "id": "international trade",
+      "label": "international trade",
+      "properties": {
+        "name": "international trade"
+      }
+    },
+    {
+      "id": "Vietnam",
+      "label": "Vietnam",
+      "properties": {
+        "name": "Vietnam"
+      }
+    },
+    {
+      "id": "South Korea",
+      "label": "South Korea",
+      "properties": {
+        "name": "South Korea"
+      }
+    },
+    {
+      "id": "software",
+      "label": "software",
+      "properties": {
+        "name": "software"
+      }
+    },
+    {
+      "id": "hardware",
+      "label": "hardware",
+      "properties": {
+        "name": "hardware"
+      }
+    },
+    {
+      "id": "Research and Development (R&D)",
+      "label": "Research and Development (R&D)",
+      "properties": {
+        "name": "Research and Development (R&D)"
+      }
+    },
+    {
+      "id": "new technologies",
+      "label": "new technologies",
+      "properties": {
+        "name": "new technologies"
+      }
+    },
+    {
+      "id": "custom components",
+      "label": "custom components",
+      "properties": {
+        "name": "custom components"
+      }
+    },
+    {
+      "id": "accessories",
+      "label": "accessories",
+      "properties": {
+        "name": "accessories"
+      }
+    },
+    {
+      "id": "wearables",
+      "label": "wearables",
+      "properties": {
+        "name": "wearables"
+      }
+    },
+    {
+      "id": "tablets",
+      "label": "tablets",
+      "properties": {
+        "name": "tablets"
+      }
+    },
+    {
+      "id": "personal computers",
+      "label": "personal computers",
+      "properties": {
+        "name": "personal computers"
+      }
+    },
+    {
+      "id": "smartphones",
+      "label": "smartphones",
+      "properties": {
+        "name": "smartphones"
+      }
+    },
+    {
+      "id": "components",
+      "label": "components",
+      "properties": {
+        "name": "components"
+      }
+    },
+    {
+      "id": "competitors",
+      "label": "competitors",
+      "properties": {
+        "name": "competitors"
+      }
+    },
+    {
+      "id": "third-party software and accessories ecosystem",
+      "label": "third-party software and accessories ecosystem",
+      "properties": {
+        "name": "third-party software and accessories ecosystem"
+      }
+    },
+    {
+      "id": "third-party digital content and applications",
+      "label": "third-party digital content and applications",
+      "properties": {
+        "name": "third-party digital content and applications"
+      }
+    },
+    {
+      "id": "content",
+      "label": "content",
+      "properties": {
+        "name": "content"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "Apple Inc.",
+      "target": "first quarter",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Inc.",
+      "target": "164,000 full-time equivalent employees",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Inc.",
+      "target": "seasonal holiday demand",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Inc.",
+      "target": "new product and service introductions",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Inc.",
+      "target": "consumers and distributors",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Nasdaq Stock Market LLC",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Common Stock, $0.00001 par value per share",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "0.000% Notes due 2025",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "0.875% Notes due 2025",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "1.625% Notes due 2026",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "2.000% Notes due 2027",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "1.375% Notes due 2029",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "3.050% Notes due 2029",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "0.500% Notes due 2031",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "3.600% Notes due 2042",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Washington, D.C.",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Cupertino, California",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Securities Exchange Act of 1934",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Rule 405 of Regulation S-T",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Rule 12b-2 of the Exchange Act",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Section 13(a) of the Exchange Act",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Section 404(b) of the Sarbanes-Oxley Act",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Section 12(b) of the Act",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Interactive Data File",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Large accelerated filer",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Accelerated filer",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Non-accelerated filer",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Smaller reporting company",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Emerging growth company",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "12 months",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "90 days",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Business",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Managements Discussion and Analysis of Financial Condition and Results of Operations",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Forward-looking statements",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iOS",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone 16 Pro",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone 16",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone 15",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone 14",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "iPhone SE",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Cloud Services",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "App Store",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Arcade",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Fitness",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Music",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple News",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple TV",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Card",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Apple Pay",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Japan",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "North America",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "South America",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "India",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Middle East",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Africa",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "China mainland",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Hong Kong",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Taiwan",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Australia",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "consumer",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "small and mid-sized business",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "education",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "enterprise",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "government",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "Vietnam",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "Taiwan",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "South Korea",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "Japan",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "India",
+      "type": "RELATED"
+    },
+    {
+      "source": "The Company",
+      "target": "China mainland",
+      "type": "RELATED"
+    },
+    {
+      "source": "smartphones",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "personal computers",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "tablets",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "wearables",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "accessories",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "services",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "third-party software and accessories ecosystem",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "content",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "third-party digital content and applications",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "components",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "custom components",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "new technologies",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Research and Development (R&D)",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "intellectual property",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "hardware",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "software",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "services",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "patents",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "designs",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "copyrights",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "trademarks",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "trade secrets",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "U.S.",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "foreign countries",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "innovative skills",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "technical competence",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "marketing abilities",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "personnel",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "research",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "development",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "design",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "marketing",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "products",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "third parties",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "licenses",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "2024 Form 10-K",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "first quarter",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "seasonal holiday demand",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "new product and service introductions",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "indirect distribution channels",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "channel inventory",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "older product",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "newer product",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "consumers and distributors",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Human Capital",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "164,000 full-time equivalent employees",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Compensation and Benefits",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Growth and Development",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "U.S. Securities and Exchange Commission",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "investor.apple.com",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "www.apple.com",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Form 10-Q",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Form 8-K",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "South Korea",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "Vietnam",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "international trade",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "tariffs",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "restrictions on imports or exports of goods, technology or data",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "restrictive measures",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "tensions between governments, including the U.S. and China",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "global smartphone",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "personal computer",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "tablet",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "R&D",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "aggressive pricing",
+      "target": "None",
+      "type": "RELATED"
+    },
+    {
+      "source": "low cost structures",
+      "target": "None",
+      "type": "RELATED"
+    }
+  ]
+}
