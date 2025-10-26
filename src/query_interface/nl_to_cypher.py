@@ -1,6 +1,7 @@
 """
 Natural Language to Cypher Query Module
 Convert natural language questions to Cypher queries
+WITH: Enhanced support for original_names and metadata
 """
 from typing import Dict, List, Optional
 import logging
@@ -46,15 +47,20 @@ class NLToCypherConverter:
             'count relationships': "MATCH ()-[r]->() RETURN count(r) as relationship_count",
             'show relationship types': "MATCH ()-[r]->() RETURN DISTINCT type(r) as relationship_type",
             'show node types': "MATCH (n) RETURN DISTINCT labels(n)[0] as node_type",
-            'most connected': "MATCH (n) WITH n, [(n)--() | 1] as connections WHERE size(connections) > 0 RETURN labels(n)[0] as type, n.name as entity, size(connections) as connections ORDER BY connections DESC LIMIT 10",
-            'apple products': "MATCH (c:Company)-[:DEVELOPS|:OWNS]->(p:Product) WHERE toLower(c.name) CONTAINS 'apple' RETURN p.name as product LIMIT 20",
-            'apple locations': "MATCH (c:Company)-[:LOCATED_IN]->(l:Location) WHERE toLower(c.name) CONTAINS 'apple' RETURN l.name as location",
-            'apple relationships': "MATCH (c:Company)-[r]->(n) WHERE toLower(c.name) CONTAINS 'apple' RETURN type(r) as relationship, labels(n)[0] as target_type, n.name as target LIMIT 20"
+            'most connected': "MATCH (n) WITH n, size([(n)--() | 1]) as connections WHERE connections > 0 RETURN labels(n)[0] as type, n.name as entity, connections ORDER BY connections DESC LIMIT 10",
+            # NEW: Enhanced entity search templates
+            'apple products': "MATCH (c:Company)-[:PRODUCES|:DEVELOPS|:OWNS]->(p:Product) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN p.name as product LIMIT 20",
+            'apple locations': "MATCH (c:Company)-[:LOCATED_IN]->(l:Location) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN l.name as location",
+            'apple relationships': "MATCH (c:Company)-[r]->(n) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN type(r) as relationship, labels(n)[0] as target_type, n.name as target LIMIT 20",
+            # NEW: Source document queries
+            'documents processed': "MATCH (n) WHERE n.source_document IS NOT NULL RETURN DISTINCT n.source_document as document",
+            'entities from document': "MATCH (n) WHERE n.source_document = $doc_name RETURN labels(n)[0] as type, n.name as entity LIMIT 50"
         }
     
     def get_schema_context(self) -> str:
         """
         Get graph schema information for context (with caching)
+        NOW INCLUDES: Information about original_names and metadata
         
         Returns:
             Schema description string
@@ -86,6 +92,17 @@ class NLToCypherConverter:
             except:
                 sample_entities[node_type] = []
         
+        # NEW: Check if nodes have metadata
+        has_metadata = False
+        try:
+            meta_check = self.neo4j_client.execute_cypher(
+                "MATCH (n) WHERE n.source_document IS NOT NULL RETURN count(n) as count LIMIT 1"
+            )
+            if meta_check and meta_check[0].get('count', 0) > 0:
+                has_metadata = True
+        except:
+            pass
+        
         schema = f"""
 Graph Schema Information:
 - Node Types ({len(node_types)}): {', '.join(node_types)}
@@ -101,15 +118,26 @@ Sample Entities:"""
 
 Important Properties:
 - All nodes have a 'name' property (primary identifier)
+- Nodes may have 'original_names' array (alternative name variants)"""
+        
+        if has_metadata:
+            schema += """
+- Nodes may have 'source_document' (origin file)
+- Nodes may have 'source_type' (document type)"""
+        
+        schema += """
 - Companies may have additional properties like address, phone, etc.
 - Products may have properties like trading_symbol, par_value, etc.
 - FinancialMetrics contain business measurements and KPIs
 
 Query Guidelines:
 - Use case-insensitive matching: WHERE toLower(n.name) CONTAINS toLower('search_term')
-- Common patterns: (Company)-[:OWNS|DEVELOPS]->(Product)
+- Search alternative names: WHERE any(name IN n.original_names WHERE toLower(name) CONTAINS toLower('search_term'))
+- Combine both: WHERE toLower(n.name) CONTAINS 'term' OR any(name IN n.original_names WHERE toLower(name) CONTAINS 'term')
+- Common patterns: (Company)-[:OWNS|DEVELOPS|PRODUCES]->(Product)
 - Geographic: (Entity)-[:LOCATED_IN]->(Location)
 - Business: (Company)-[:COMPETES_WITH|PARTNERS_WITH]->(Company)
+- People: (Person)-[:WORKS_FOR|CEO_OF]->(Company)
 """
         
         # Cache the result
@@ -130,7 +158,10 @@ Query Guidelines:
         return self.get_schema_context()
     
     def create_cypher_prompt(self, nl_question: str) -> str:
-        """Create prompt for LLM to generate Cypher query"""
+        """
+        Create prompt for LLM to generate Cypher query
+        NOW INCLUDES: Examples with original_names usage
+        """
         schema = self.get_schema_context()
 
         prompt = f"""You are an expert Neo4j Cypher query generator. Generate ONLY a valid Cypher query based on the schema and question below.
@@ -141,31 +172,35 @@ QUERY GENERATION RULES:
 1. Use proper Cypher syntax: MATCH, WHERE, RETURN
 2. Use node labels and aliases: (c:Company), (p:Product)
 3. Case-insensitive matching: WHERE toLower(n.name) CONTAINS toLower('search_term')
-4. Limit results: LIMIT 20 (unless asking for counts)
-5. Return meaningful fields, not whole nodes
-6. Use appropriate relationship types from the schema
+4. Search alternative names when available: WHERE any(name IN n.original_names WHERE toLower(name) CONTAINS toLower('term'))
+5. Limit results: LIMIT 20 (unless asking for counts)
+6. Return meaningful fields, not whole nodes
+7. Use appropriate relationship types from the schema
 
 FINANCIAL DOMAIN EXAMPLES:
 Q: "What products does Apple make?"
-A: MATCH (c:Company)-[:DEVELOPS|:OWNS]->(p:Product) WHERE toLower(c.name) CONTAINS toLower('apple') RETURN p.name as product LIMIT 20
+A: MATCH (c:Company)-[:DEVELOPS|:OWNS|:PRODUCES]->(p:Product) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN p.name as product LIMIT 20
 
 Q: "Show Apple's financial metrics"
-A: MATCH (c:Company)-[:HAS_METRIC]->(fm:FinancialMetric) WHERE toLower(c.name) CONTAINS toLower('apple') RETURN fm.name as metric LIMIT 20
+A: MATCH (c:Company)-[:HAS_METRIC]->(fm:FinancialMetric) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN fm.name as metric LIMIT 20
 
 Q: "Where is Apple located?"
-A: MATCH (c:Company)-[:LOCATED_IN]->(l:Location) WHERE toLower(c.name) CONTAINS toLower('apple') RETURN l.name as location
-
-Q: "What technologies does Apple develop?"
-A: MATCH (c:Company)-[:DEVELOPS]->(t:Technology) WHERE toLower(c.name) CONTAINS toLower('apple') RETURN t.name as technology LIMIT 20
+A: MATCH (c:Company)-[:LOCATED_IN]->(l:Location) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN l.name as location
 
 Q: "Who does Apple compete with?"
-A: MATCH (c:Company)-[:COMPETES_WITH]->(comp) WHERE toLower(c.name) CONTAINS toLower('apple') RETURN comp.name as competitor LIMIT 20
+A: MATCH (c:Company)-[:COMPETES_WITH]->(comp) WHERE toLower(c.name) CONTAINS 'apple' OR any(name IN c.original_names WHERE toLower(name) CONTAINS 'apple') RETURN comp.name as competitor LIMIT 20
 
 Q: "Count all companies"
 A: MATCH (c:Company) RETURN count(c) as company_count
 
 Q: "Most connected entities"
-A: MATCH (n) WITH n, [(n)--() | 1] as connections WHERE size(connections) > 0 RETURN labels(n)[0] as type, n.name as entity, size(connections) as connections ORDER BY connections DESC LIMIT 10
+A: MATCH (n) WITH n, size([(n)--() | 1]) as connections WHERE connections > 0 RETURN labels(n)[0] as type, n.name as entity, connections ORDER BY connections DESC LIMIT 10
+
+Q: "Show entities from specific document"
+A: MATCH (n) WHERE n.source_document = 'document_name.pdf' RETURN labels(n)[0] as type, n.name as entity LIMIT 50
+
+Q: "Find all name variants for Apple"
+A: MATCH (c:Company) WHERE toLower(c.name) CONTAINS 'apple' RETURN c.name as canonical_name, c.original_names as variants
 
 Now generate the Cypher query for: "{nl_question}"
 
@@ -211,8 +246,10 @@ Return ONLY the Cypher query, no explanations."""
                 if response:
                     logger.info("LLM Cypher generation successful")
                     cypher = response.strip()
+                    # Remove markdown code blocks if present
                     if cypher.startswith("```"):
-                        cypher = "\n".join(cypher.split("\n")[1:-1])
+                        lines = cypher.split("\n")
+                        cypher = "\n".join(lines[1:-1]) if len(lines) > 2 else cypher
                     return cypher.strip()
             except Exception as e:
                 logger.warning(f"LLM call failed on attempt {attempt+1}: {e}")
@@ -270,6 +307,7 @@ Return ONLY the Cypher query, no explanations."""
     def format_results(self, query_result: Dict) -> str:
         """
         Format query results as readable text
+        NOW INCLUDES: Better formatting for lists and nested data
         
         Args:
             query_result: Result from execute_natural_query
@@ -292,7 +330,15 @@ Return ONLY the Cypher query, no explanations."""
         else:
             for i, record in enumerate(results, 1):
                 output += f"{i}. "
-                output += ", ".join([f"{k}: {v}" for k, v in record.items()])
+                parts = []
+                for k, v in record.items():
+                    # NEW: Handle lists (like original_names)
+                    if isinstance(v, list):
+                        if v:  # Non-empty list
+                            parts.append(f"{k}: {', '.join(str(x) for x in v)}")
+                    else:
+                        parts.append(f"{k}: {v}")
+                output += ", ".join(parts)
                 output += "\n"
         
         return output
@@ -300,25 +346,32 @@ Return ONLY the Cypher query, no explanations."""
     def get_suggested_questions(self) -> List[str]:
         """
         Generate suggested questions for LLM-powered query generation
+        NOW INCLUDES: Queries that leverage enhanced features
         
         Returns:
             List of example questions (all use LLM API)
         """
-        # Sample questions that work well with LLM generation
         suggestions = [
+            # Basic queries
             "Count all companies",
             "List companies", 
             "Count products",
             "List products",
             "Count people",
             "List people",
-            "Count locations", 
             "Show relationship types",
-            "Show node types",
             "Most connected entities",
+            
+            # Entity-specific queries
             "Apple products",
             "Apple locations",
-            "Apple relationships"
+            "Apple relationships",
+            
+            # NEW: Queries using enhanced features
+            "Show all name variants for companies",
+            "Which documents were processed?",
+            "Find companies with multiple names",
+            "Show products and their manufacturers"
         ]
         
         return suggestions
@@ -378,3 +431,27 @@ class QueryInterface:
                 output += f"   Results: {result['num_results']}\n"
         
         return output
+    
+    # NEW: Get query statistics
+    def get_query_statistics(self) -> Dict:
+        """Get statistics about query history"""
+        if not self.query_history:
+            return {
+                'total_queries': 0,
+                'successful_queries': 0,
+                'failed_queries': 0,
+                'average_results': 0
+            }
+        
+        successful = [q for q in self.query_history if q.get('success')]
+        failed = [q for q in self.query_history if not q.get('success')]
+        
+        total_results = sum(q.get('num_results', 0) for q in successful)
+        avg_results = total_results / len(successful) if successful else 0
+        
+        return {
+            'total_queries': len(self.query_history),
+            'successful_queries': len(successful),
+            'failed_queries': len(failed),
+            'average_results': round(avg_results, 2)
+        }

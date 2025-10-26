@@ -128,11 +128,11 @@ class GraphVisualizer:
                     })
         
         return {'nodes': list(nodes.values()), 'edges': edges}
-
+    
     # ------------------------- PYVIS NETWORK -------------------------
 
     def create_pyvis_network(self, data: Dict = None, 
-                             output_file: str = "knowledge_graph.html") -> str:
+                            output_file: str = "knowledge_graph.html") -> str:
         """
         Create interactive HTML visualization using PyVis
         
@@ -161,33 +161,49 @@ class GraphVisualizer:
         # Configure physics
         net.set_options("""
         {
-          "physics": {
+        "physics": {
             "barnesHut": {
-              "gravitationalConstant": -30000,
-              "centralGravity": 0.3,
-              "springLength": 150,
-              "springConstant": 0.04,
-              "damping": 0.09
+            "gravitationalConstant": -30000,
+            "centralGravity": 0.3,
+            "springLength": 150,
+            "springConstant": 0.04,
+            "damping": 0.09
             },
             "minVelocity": 0.75
-          },
-          "interaction": {
+        },
+        "interaction": {
             "hover": true,
             "tooltipDelay": 100
-          }
+        }
         }
         """)
-        
-        # Add nodes
+
+        # ---------------- NEW NODE SECTION ----------------
         for node in data['nodes']:
             node_type = node['properties'].get('type', 'Unknown')
             color = self.color_map.get(node_type, '#95A5A6')
 
             title = f"<b>{node['label']}</b><br>"
             title += f"Type: {node_type}<br>"
+            
+            # NEW: Show original names if present
+            if 'original_names' in node['properties']:
+                orig_names = node['properties']['original_names']
+                if orig_names and len(orig_names) > 1:
+                    title += f"Also known as: {', '.join(orig_names[:3])}<br>"
+            
+            # NEW: Show source document if present
+            if 'source_document' in node['properties']:
+                title += f"Source: {node['properties']['source_document']}<br>"
+            
+            # Add remaining properties (excluding redundant ones)
             for k, v in node['properties'].items():
-                if k not in ('name', 'type'):
-                    title += f"{k}: {v}<br>"
+                if k not in ('name', 'type', 'original_names', 'source_document', 'source_type'):
+                    # Limit long values for readability
+                    v_str = str(v)
+                    if len(v_str) > 50:
+                        v_str = v_str[:47] + '...'
+                    title += f"{k}: {v_str}<br>"
 
             net.add_node(
                 node['id'],
@@ -196,7 +212,7 @@ class GraphVisualizer:
                 color=color,
                 size=25
             )
-        
+
         # Add edges
         for edge in data['edges']:
             net.add_edge(

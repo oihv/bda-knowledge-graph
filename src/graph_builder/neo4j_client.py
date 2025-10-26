@@ -1,6 +1,7 @@
 """
 Neo4j Client Module
 Handles connection and operations with Neo4j graph database
+WITH: Support for original_names and enhanced node merging
 """
 from neo4j import GraphDatabase
 from typing import Dict, List, Optional
@@ -65,6 +66,8 @@ class Neo4jClient:
             "CREATE CONSTRAINT IF NOT EXISTS FOR (p:Person) REQUIRE p.name IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (pr:Product) REQUIRE pr.name IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (l:Location) REQUIRE l.name IS UNIQUE",
+            "CREATE CONSTRAINT IF NOT EXISTS FOR (o:Organization) REQUIRE o.name IS UNIQUE",
+            "CREATE CONSTRAINT IF NOT EXISTS FOR (t:Technology) REQUIRE t.name IS UNIQUE",
         ]
         
         with self.driver.session() as session:
@@ -81,6 +84,9 @@ class Neo4jClient:
         indexes = [
             "CREATE INDEX IF NOT EXISTS FOR (c:Company) ON (c.name)",
             "CREATE INDEX IF NOT EXISTS FOR (p:Person) ON (p.name)",
+            "CREATE INDEX IF NOT EXISTS FOR (pr:Product) ON (pr.name)",
+            "CREATE INDEX IF NOT EXISTS FOR (n:Company) ON (n.original_names)",
+            "CREATE INDEX IF NOT EXISTS FOR (n:Person) ON (n.original_names)",
         ]
         
         with self.driver.session() as session:
@@ -95,11 +101,12 @@ class Neo4jClient:
     def create_node(self, name: str, label: str, properties: Dict = None) -> bool:
         """
         Create or update a node in the graph
+        NOW HANDLES: original_names for tracking entity variants
         
         Args:
-            name: Node name (unique identifier)
+            name: Node name (canonical/normalized)
             label: Node label (type)
-            properties: Additional properties
+            properties: Additional properties (may include 'original_names')
             
         Returns:
             True if successful
@@ -107,18 +114,56 @@ class Neo4jClient:
         props = properties or {}
         props['name'] = name
         
-        # Convert properties to Cypher-compatible format
-        props_str = ', '.join([f"{k}: ${k}" for k in props.keys()])
+        # NEW: Handle original_names as a list
+        if 'original_names' in props:
+            original_names = props['original_names']
+            if isinstance(original_names, list):
+                # Neo4j can store lists directly
+                props['original_names'] = original_names
+            else:
+                props['original_names'] = [original_names]
+        
+        # Separate list properties from scalar properties
+        list_props = {}
+        scalar_props = {}
+        
+        for k, v in props.items():
+            if isinstance(v, list):
+                list_props[k] = v
+            else:
+                scalar_props[k] = v
+        
+        # Build SET clause for scalar properties
+        if scalar_props:
+            scalar_str = ', '.join([f"n.{k} = ${k}" for k in scalar_props.keys()])
+        else:
+            scalar_str = ""
+        
+        # Build SET clause for list properties (append mode)
+        list_clauses = []
+        if list_props:
+            for k in list_props.keys():
+                # Use COALESCE to handle existing vs new lists
+                list_clauses.append(f"n.{k} = COALESCE(n.{k}, []) + ${k}")
+        
+        # Combine clauses
+        set_clauses = []
+        if scalar_str:
+            set_clauses.append(scalar_str)
+        set_clauses.extend(list_clauses)
+        
+        set_statement = "SET " + ", ".join(set_clauses) if set_clauses else ""
         
         query = f"""
         MERGE (n:{label} {{name: $name}})
-        SET n += {{{props_str}}}
+        {set_statement}
         RETURN n
         """
         
         try:
             with self.driver.session() as session:
-                session.run(query, **props)
+                all_props = {**scalar_props, **list_props}
+                session.run(query, **all_props)
             return True
         except Exception as e:
             logger.error(f"Error creating node {name}: {e}")
@@ -128,10 +173,11 @@ class Neo4jClient:
                           rel_type: str, properties: Dict = None) -> bool:
         """
         Create a relationship between two nodes
+        NOW HANDLES: Relationship properties including metadata
         
         Args:
-            source: Source node name
-            target: Target node name
+            source: Source node name (canonical)
+            target: Target node name (canonical)
             rel_type: Relationship type
             properties: Relationship properties
             
@@ -165,6 +211,35 @@ class Neo4jClient:
         except Exception as e:
             logger.error(f"Error creating relationship {source}-[{rel_type}]->{target}: {e}")
             return False
+    
+    # NEW: Find node by original name
+    def find_node_by_original_name(self, original_name: str) -> Optional[str]:
+        """
+        Find canonical node name by searching original_names
+        
+        Args:
+            original_name: One of the original entity name variants
+            
+        Returns:
+            Canonical node name or None
+        """
+        query = """
+        MATCH (n)
+        WHERE $original_name IN n.original_names OR n.name = $original_name
+        RETURN n.name as canonical_name
+        LIMIT 1
+        """
+        
+        try:
+            with self.driver.session() as session:
+                result = session.run(query, original_name=original_name)
+                record = result.single()
+                if record:
+                    return record['canonical_name']
+                return None
+        except Exception as e:
+            logger.error(f"Error finding node by original name {original_name}: {e}")
+            return None
     
     def get_node(self, name: str) -> Optional[Dict]:
         """
@@ -362,3 +437,56 @@ class Neo4jClient:
         except Exception as e:
             logger.error(f"Error fetching graph statistics: {e}")
             return stats
+    
+    # NEW: Merge duplicate nodes
+    def merge_duplicate_nodes(self, name1: str, name2: str, keep: str = 'first') -> bool:
+        """
+        Merge two duplicate nodes, keeping one and transferring relationships
+        
+        Args:
+            name1: First node name
+            name2: Second node name
+            keep: Which node to keep ('first' or 'second')
+            
+        Returns:
+            True if successful
+        """
+        keep_name = name1 if keep == 'first' else name2
+        remove_name = name2 if keep == 'first' else name1
+        
+        query = """
+        MATCH (keep {name: $keep_name})
+        MATCH (remove {name: $remove_name})
+        
+        // Transfer all relationships
+        OPTIONAL MATCH (remove)-[r1]->(target)
+        WHERE target <> keep
+        MERGE (keep)-[r2:type(r1)]->(target)
+        SET r2 += properties(r1)
+        
+        OPTIONAL MATCH (source)-[r3]->(remove)
+        WHERE source <> keep
+        MERGE (source)-[r4:type(r3)]->(keep)
+        SET r4 += properties(r3)
+        
+        // Merge original_names
+        SET keep.original_names = COALESCE(keep.original_names, []) + 
+                                   COALESCE(remove.original_names, []) + 
+                                   [remove.name]
+        
+        // Delete the duplicate node
+        DETACH DELETE remove
+        
+        RETURN keep
+        """
+        
+        try:
+            with self.driver.session() as session:
+                result = session.run(query, keep_name=keep_name, remove_name=remove_name)
+                if result.single():
+                    logger.info(f"Merged {remove_name} into {keep_name}")
+                    return True
+                return False
+        except Exception as e:
+            logger.error(f"Error merging nodes {name1} and {name2}: {e}")
+            return False

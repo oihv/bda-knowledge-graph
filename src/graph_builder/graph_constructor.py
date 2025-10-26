@@ -1,6 +1,7 @@
 """
 Graph Constructor Module
 Builds knowledge graph from extracted entities and relationships
+WITH: Enhanced duplicate handling and metadata support
 """
 from typing import Dict, List
 import logging
@@ -27,6 +28,7 @@ class GraphConstructor:
                                    clear_existing: bool = False) -> Dict:
         """
         Build graph from a single extraction result
+        NOW HANDLES: original_names and metadata from enhanced extraction
         
         Args:
             extraction: Dictionary with entities and relationships
@@ -45,7 +47,8 @@ class GraphConstructor:
             'nodes_created': 0,
             'nodes_failed': 0,
             'relationships_created': 0,
-            'relationships_failed': 0
+            'relationships_failed': 0,
+            'nodes_merged': 0
         }
         
         # Create nodes
@@ -55,7 +58,17 @@ class GraphConstructor:
         for entity in tqdm(entities, desc="Creating nodes"):
             name = entity.get('name', '')
             entity_type = entity.get('type', 'Unknown')
-            properties = entity.get('properties', {})
+            properties = entity.get('properties', {}).copy()
+            
+            # NEW: Include original_names if present
+            if 'original_names' in entity:
+                properties['original_names'] = entity['original_names']
+            
+            # NEW: Include source metadata
+            if 'source_document' in entity:
+                properties['source_document'] = entity['source_document']
+            if 'source_type' in entity:
+                properties['source_type'] = entity['source_type']
             
             if name:
                 success = self.client.create_node(name, entity_type, properties)
@@ -180,6 +193,7 @@ class GraphConstructor:
     def validate_graph(self) -> Dict:
         """
         Validate graph structure and return issues
+        NOW INCLUDES: Enhanced duplicate detection using original_names
         
         Returns:
             Dictionary with validation results
@@ -189,7 +203,8 @@ class GraphConstructor:
         issues = {
             'isolated_nodes': [],
             'missing_relationships': [],
-            'duplicate_nodes': []
+            'duplicate_nodes': [],
+            'abstract_nodes': []
         }
         
         # Find isolated nodes (no relationships)
@@ -217,7 +232,108 @@ class GraphConstructor:
         result = self.client.execute_cypher(duplicate_query)
         issues['duplicate_nodes'] = result
         
+        # NEW: Find abstract concept nodes (should have been filtered)
+        abstract_query = """
+        MATCH (n)
+        WHERE toLower(n.name) IN ['revenue', 'profit', 'growth', 'income', 'expense', 'the company', 'the product']
+        RETURN n.name as name, labels(n)[0] as label
+        LIMIT 20
+        """
+        
+        result = self.client.execute_cypher(abstract_query)
+        issues['abstract_nodes'] = result
+        
         logger.info(f"Validation complete: Found {len(issues['isolated_nodes'])} isolated nodes, "
-                   f"{len(issues['duplicate_nodes'])} potential duplicates")
+                   f"{len(issues['duplicate_nodes'])} potential duplicates, "
+                   f"{len(issues['abstract_nodes'])} abstract nodes")
         
         return issues
+    
+    # NEW: Clean up abstract nodes
+    def cleanup_abstract_nodes(self) -> int:
+        """
+        Remove abstract concept nodes that shouldn't be in the graph
+        
+        Returns:
+            Number of nodes removed
+        """
+        logger.info("Cleaning up abstract concept nodes")
+        
+        cleanup_query = """
+        MATCH (n)
+        WHERE toLower(n.name) IN ['revenue', 'profit', 'growth', 'income', 'expense', 
+                                   'cost', 'sales', 'the company', 'the product', 'the person',
+                                   'increase', 'decrease', 'report', 'document', 'statement']
+        DETACH DELETE n
+        RETURN count(n) as removed
+        """
+        
+        try:
+            result = self.client.execute_cypher(cleanup_query)
+            if result:
+                removed = result[0].get('removed', 0)
+                logger.info(f"Removed {removed} abstract concept nodes")
+                return removed
+            return 0
+        except Exception as e:
+            logger.error(f"Error cleaning up abstract nodes: {e}")
+            return 0
+    
+    # NEW: Merge similar nodes based on original_names
+    def merge_similar_nodes(self) -> int:
+        """
+        Merge nodes that have overlapping original_names
+        
+        Returns:
+            Number of nodes merged
+        """
+        logger.info("Merging similar nodes based on original_names")
+        
+        merge_query = """
+        MATCH (n1), (n2)
+        WHERE id(n1) < id(n2)
+        AND labels(n1) = labels(n2)
+        AND any(name1 IN n1.original_names WHERE name1 IN n2.original_names)
+        
+        // Keep the node with more relationships
+        WITH n1, n2, 
+             size((n1)--()) as n1_rels, 
+             size((n2)--()) as n2_rels
+        WITH CASE WHEN n1_rels >= n2_rels THEN n1 ELSE n2 END as keep,
+             CASE WHEN n1_rels >= n2_rels THEN n2 ELSE n1 END as remove
+        
+        // Transfer relationships
+        OPTIONAL MATCH (remove)-[r1]->(target)
+        WHERE target <> keep
+        FOREACH (_ IN CASE WHEN target IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (keep)-[r2:type(r1)]->(target)
+            SET r2 += properties(r1)
+        )
+        
+        OPTIONAL MATCH (source)-[r3]->(remove)
+        WHERE source <> keep
+        FOREACH (_ IN CASE WHEN source IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (source)-[r4:type(r3)]->(keep)
+            SET r4 += properties(r3)
+        )
+        
+        // Merge properties
+        SET keep.original_names = COALESCE(keep.original_names, []) + 
+                                   COALESCE(remove.original_names, [])
+        
+        // Delete duplicate
+        DETACH DELETE remove
+        
+        RETURN count(remove) as merged
+        """
+        
+        try:
+            result = self.client.execute_cypher(merge_query)
+            if result:
+                merged = result[0].get('merged', 0)
+                logger.info(f"Merged {merged} duplicate nodes")
+                return merged
+            return 0
+        except Exception as e:
+            logger.error(f"Error merging similar nodes: {e}")
+            return 0

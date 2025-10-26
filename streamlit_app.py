@@ -13,7 +13,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Import project modules
-from config import OUTPUT_DIR, VISUALIZATION_DIR, SAMPLE_REPORTS_DIR
+from config import (OUTPUT_DIR, VISUALIZATION_DIR, SAMPLE_REPORTS_DIR,
+                  CHUNK_SIZE, CHUNK_OVERLAP)
 from src.preprocessing.pdf_processor import PDFProcessor, create_sample_text_documents
 from src.preprocessing.text_cleaner import TextCleaner
 from src.llm_extraction.llm_client import LLMClient, MockLLMClient
@@ -158,7 +159,9 @@ with st.sidebar:
             "Model",
             ["google/gemma-2-9b-it:free", 
              "meta-llama/llama-3.1-8b-instruct:free",
-             "mistralai/mistral-7b-instruct:free"],
+             "mistralai/mistral-7b-instruct:free",
+             "deepseek/deepseek-r1-0528:free",
+             "qwen/qwen3-235b-a22b:free"],
             help="Free models are available for extraction"
         )
         
@@ -381,7 +384,7 @@ with tab1:
             
             preprocessed = []
             for doc in documents:
-                processed = TextCleaner.preprocess_document(doc, chunk_size=2000, overlap=200)
+                processed = TextCleaner.preprocess_document(doc)  # Using CHUNK_SIZE and CHUNK_OVERLAP from config
                 # Limit chunks
                 processed['chunks'] = processed['chunks'][:max_chunks]
                 processed['num_chunks'] = len(processed['chunks'])
@@ -552,6 +555,154 @@ with tab2:
                             st.write(f"**{node_type}:** {count}")
                 except:
                     st.info("Run graph construction to see statistics")
+        
+        # NEW: Advanced Graph Cleanup Section
+        if st.session_state.graph_built:
+            st.divider()
+            st.subheader("🔧 Advanced Graph Cleanup")
+            
+            st.info("💡 **Tip:** These tools help improve graph quality by removing noise and merging duplicates")
+            
+            # Create three columns for cleanup operations
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.markdown("**Remove Abstract Nodes**")
+                st.caption("Remove non-entity concepts like 'revenue', 'growth', 'the company'")
+                if st.button("🧹 Clean Abstract Nodes", use_container_width=True):
+                    with st.spinner("Removing abstract concept nodes..."):
+                        try:
+                            constructor = GraphConstructor(st.session_state.neo4j_client)
+                            removed = constructor.cleanup_abstract_nodes()
+                            if removed > 0:
+                                st.success(f"✅ Removed {removed} abstract nodes")
+                                st.balloons()
+                            else:
+                                st.info("✓ No abstract nodes found")
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+            
+            with col2:
+                st.markdown("**Merge Duplicate Nodes**")
+                st.caption("Automatically merge nodes with overlapping original names")
+                if st.button("🔗 Merge Duplicates", use_container_width=True):
+                    with st.spinner("Merging duplicate nodes..."):
+                        try:
+                            constructor = GraphConstructor(st.session_state.neo4j_client)
+                            merged = constructor.merge_similar_nodes()
+                            if merged > 0:
+                                st.success(f"✅ Merged {merged} duplicate nodes")
+                                st.balloons()
+                            else:
+                                st.info("✓ No duplicates found")
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+            
+            with col3:
+                st.markdown("**Validate Graph**")
+                st.caption("Check for isolated nodes, duplicates, and quality issues")
+                if st.button("🔍 Validate Graph", use_container_width=True):
+                    with st.spinner("Validating graph structure..."):
+                        try:
+                            constructor = GraphConstructor(st.session_state.neo4j_client)
+                            issues = constructor.validate_graph()
+                            
+                            # Display validation results
+                            st.success("✅ Validation Complete")
+                            
+                            # Create metrics for issues found
+                            metric_col1, metric_col2, metric_col3 = st.columns(3)
+                            with metric_col1:
+                                st.metric("Isolated Nodes", len(issues.get('isolated_nodes', [])))
+                            with metric_col2:
+                                st.metric("Potential Duplicates", len(issues.get('duplicate_nodes', [])))
+                            with metric_col3:
+                                st.metric("Abstract Nodes", len(issues.get('abstract_nodes', [])))
+                            
+                            # Show detailed issues in expandable sections
+                            if issues.get('isolated_nodes'):
+                                with st.expander(f"⚠️ Isolated Nodes ({len(issues['isolated_nodes'])})"):
+                                    for node in issues['isolated_nodes'][:10]:
+                                        st.write(f"- **{node.get('name')}** ({node.get('label')})")
+                                    if len(issues['isolated_nodes']) > 10:
+                                        st.caption(f"...and {len(issues['isolated_nodes']) - 10} more")
+                            
+                            if issues.get('duplicate_nodes'):
+                                with st.expander(f"⚠️ Potential Duplicates ({len(issues['duplicate_nodes'])})"):
+                                    for dup in issues['duplicate_nodes'][:10]:
+                                        st.write(f"- **{dup.get('name1')}** ↔️ **{dup.get('name2')}** ({dup.get('label')})")
+                                    if len(issues['duplicate_nodes']) > 10:
+                                        st.caption(f"...and {len(issues['duplicate_nodes']) - 10} more")
+                            
+                            if issues.get('abstract_nodes'):
+                                with st.expander(f"⚠️ Abstract Concept Nodes ({len(issues['abstract_nodes'])})"):
+                                    for node in issues['abstract_nodes']:
+                                        st.write(f"- **{node.get('name')}** ({node.get('label')})")
+                            
+                            # If graph is clean, show success message
+                            if (not issues.get('isolated_nodes') and 
+                                not issues.get('duplicate_nodes') and 
+                                not issues.get('abstract_nodes')):
+                                st.success("🎉 Graph is clean! No issues found.")
+                        
+                        except Exception as e:
+                            st.error(f"Error validating graph: {e}")
+            
+            # Add a "Run All Cleanup" button
+            st.markdown("---")
+            col_left, col_center, col_right = st.columns([1, 2, 1])
+            with col_center:
+                if st.button("⚡ Run All Cleanup Operations", type="secondary", use_container_width=True):
+                    with st.spinner("Running comprehensive graph cleanup..."):
+                        try:
+                            constructor = GraphConstructor(st.session_state.neo4j_client)
+                            
+                            progress_bar = st.progress(0)
+                            status_text = st.empty()
+                            
+                            # Step 1: Remove abstract nodes
+                            status_text.text("1/3 Removing abstract concept nodes...")
+                            progress_bar.progress(33)
+                            removed = constructor.cleanup_abstract_nodes()
+                            
+                            # Step 2: Merge duplicates
+                            status_text.text("2/3 Merging duplicate nodes...")
+                            progress_bar.progress(66)
+                            merged = constructor.merge_similar_nodes()
+                            
+                            # Step 3: Validate
+                            status_text.text("3/3 Validating final graph...")
+                            progress_bar.progress(100)
+                            issues = constructor.validate_graph()
+                            
+                            status_text.empty()
+                            progress_bar.empty()
+                            
+                            # Show summary
+                            st.success("✅ Comprehensive Cleanup Complete!")
+                            
+                            summary_col1, summary_col2, summary_col3 = st.columns(3)
+                            with summary_col1:
+                                st.metric("Nodes Removed", removed)
+                            with summary_col2:
+                                st.metric("Nodes Merged", merged)
+                            with summary_col3:
+                                remaining_issues = (len(issues.get('isolated_nodes', [])) + 
+                                                  len(issues.get('duplicate_nodes', [])) + 
+                                                  len(issues.get('abstract_nodes', [])))
+                                st.metric("Remaining Issues", remaining_issues)
+                            
+                            if remaining_issues == 0:
+                                st.balloons()
+                                st.success("🎉 Your graph is now optimized and clean!")
+                            else:
+                                st.info(f"💡 Graph improved! {remaining_issues} minor issues remain (check validation results above)")
+                        
+                        except Exception as e:
+                            st.error(f"Error during cleanup: {e}")
+                            import traceback
+                            with st.expander("Error Details"):
+                                st.code(traceback.format_exc())
 
 # Tab 3: Visualize
 with tab3:

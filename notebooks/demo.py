@@ -17,7 +17,7 @@ This notebook walks through the complete pipeline:
 import sys
 sys.path.append('..')
 
-from config import *
+from config import *  # This imports CHUNK_SIZE and CHUNK_OVERLAP
 from src.preprocessing.pdf_processor import create_sample_text_documents
 from src.preprocessing.text_cleaner import TextCleaner
 from src.llm_extraction.llm_client import LLMClient, MockLLMClient
@@ -65,7 +65,7 @@ Prepare text for LLM processing by:
 preprocessed_docs = []
 
 for doc in documents:
-    processed = TextCleaner.preprocess_document(doc, chunk_size=2000, overlap=200)
+    processed = TextCleaner.preprocess_document(doc)  # Using configured CHUNK_SIZE and CHUNK_OVERLAP
     preprocessed_docs.append(processed)
     
     print(f"✅ {doc['filename']}:")
