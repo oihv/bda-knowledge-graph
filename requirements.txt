@@ -16,3 +16,5 @@ torch
 pathlib
 json5
 argparse
+matplotlib
+networkx
